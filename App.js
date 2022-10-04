@@ -1,21 +1,14 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+"use strict";
+exports.__esModule = true;
+var react_1 = require("react");
+var native_1 = require("@react-navigation/native");
+var react_native_gesture_handler_1 = require("react-native-gesture-handler");
+var index_routes_1 = require("./src/routes/index.routes");
+function App() {
+    return (<native_1.NavigationContainer>
+        <react_native_gesture_handler_1.GestureHandlerRootView style={{ flex: 1 }}>
+            <index_routes_1.DrawerNavigation />
+        </react_native_gesture_handler_1.GestureHandlerRootView>
+    </native_1.NavigationContainer>);
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+exports["default"] = App;
