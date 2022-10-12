@@ -12,6 +12,7 @@ const Tab = createMaterialTopTabNavigator();
 import { ChaptersScreens } from "../screens/AntigoTestamentoHome/ChaptersScreens";
 import { VerseScreen } from "../screens/AntigoTestamentoHome/ChaptersScreens/VerseScreen";
 import { Books } from "../screens/AntigoTestamentoHome";
+import { Loading } from "../components/loading";
 
 export function AtTopTabs() {
 
@@ -31,6 +32,8 @@ export function AtTopTabs() {
                         tabBarActiveTintColor: "#7205DC",
                         tabBarPressColor: "#3AF1A1",
                         tabBarIcon: () => <MaterialCommunityIcons name="book-multiple" size={24} color="#7205DC" />,
+                        lazy: true,
+                        lazyPlaceholder: () => <Loading />
                     }}
                 />
 
@@ -44,7 +47,8 @@ export function AtTopTabs() {
                         tabBarActiveTintColor: "#7205DC",
                         tabBarPressColor: "#3AF1A1",
                         tabBarIcon: () => <MaterialCommunityIcons name="numeric-3-box-multiple" size={24} color="#7205DC" />,
-                        lazy: true
+                        lazy: true,
+                        lazyPlaceholder: () => <Loading />
                     }}
                 />
 
@@ -58,7 +62,8 @@ export function AtTopTabs() {
                         tabBarActiveTintColor: "#7205DC",
                         tabBarPressColor: "#3AF1A1",
                         tabBarIcon: () => <MaterialIcons name="library-books" size={24} color="#7205DC" />,
-                        lazy: true
+                        lazy: true,
+                        lazyPlaceholder: () => <Loading />
                     }}
                 />
             </Tab.Navigator>

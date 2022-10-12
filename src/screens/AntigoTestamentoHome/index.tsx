@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+
 import { FlatList, StyleSheet } from "react-native";
+import { useIsFocused } from "@react-navigation/native";
 
 import { useBook } from "../../hooks/atBooksContext";
 import { BookButton } from "../../components/bookButton";
@@ -16,17 +18,20 @@ interface bookDataProps {
 
 export function Books(){
     const { bibleData } = useBook();
+    const isFocused = useIsFocused();
 
-    const [books, setBooks] = useState<bookDataProps[]>( bibleData );
+    const [books, setBooks] = useState<bookDataProps[]>( [] );
     const [searchText, setSearchText] = useState("");
 
     function handleSearchBook(bookName: string) {
-        console.log(bookName);
-        const book = bibleData.find((item) => item.abbrev === bookName);
+        const book = bibleData.filter((item) => (item.name.includes(bookName)));
 
-        console.log(book);
-
+        setBooks(book);
     }
+
+    useEffect(() => {
+        setBooks(bibleData);
+    }, [isFocused]);
 
     console.log("Tela dos livros do antigo testamento");
 
