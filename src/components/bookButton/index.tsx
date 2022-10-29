@@ -11,7 +11,7 @@ import {
     FooterText
 } from "./styles";
 
-import { useBook } from "../../hooks/atBooksContext";
+import { useBook } from "../../hooks/BibleContext";
 
 interface BookButtonProps{
     id: number;
@@ -27,9 +27,9 @@ function BookButtonComponent({
     data
 }: BookButtonProps){
     const navigation = useNavigation();
-    const { handleSelectBook } = useBook();
+    const { setBookName } = useBook();
     function handleCallChapter() {
-        handleSelectBook( bookName );
+        setBookName( bookName );
         navigation.navigate("CAPÍTULOS", { bookData: data })
     }
 

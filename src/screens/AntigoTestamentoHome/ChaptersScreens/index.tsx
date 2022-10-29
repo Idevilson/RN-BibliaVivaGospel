@@ -3,11 +3,16 @@ import { StyleSheet, FlatList} from "react-native";
 
 import { Container } from "./styles";
 import { Chapter } from "../../../components/chapter";
-import { useBook } from "../../../hooks/atBooksContext";
+import { useBook } from "../../../hooks/BibleContext";
+import { BotomLabelBibleVersion } from "../../../components/bottomLabelBibleVersion";
+import { useBibleVersion } from "../../../hooks/BibleVersionContext";
 
 
 export function ChaptersScreens(){
     const { book } = useBook();
+    const {
+        versionSelected
+    } = useBibleVersion();
 
     console.log("Tela dos capítulos");
 
@@ -16,6 +21,7 @@ export function ChaptersScreens(){
             <FlatList 
                 style={styles.FlatList}
                 data={book.chapters}
+                initialNumToRender={10}
                 numColumns={4}
                 columnWrapperStyle={{ justifyContent: "center", alignItems: "center" }}
 
@@ -26,6 +32,8 @@ export function ChaptersScreens(){
                     />
                 )}
             />
+
+            <BotomLabelBibleVersion bibleVersion={versionSelected.label} />
         </Container>
     );
 }

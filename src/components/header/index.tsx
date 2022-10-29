@@ -4,9 +4,11 @@ import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
 import { Container, ButtonContainer } from "./styles";
+import { useBibleVersion } from "../../hooks/BibleVersionContext";
 
 export function Header(){
     const navigation = useNavigation();
+    const { setVersionSelected } = useBibleVersion();
 
     return(
         <Container>
@@ -22,8 +24,10 @@ export function Header(){
 
                 <ModalDropdown 
                     options={['Versão AA', 'Versã ACF', 'Versão NVI']}
-                    animated={true} 
-                    
+                    animated={true}
+
+                    onSelect={(value) => setVersionSelected(Number(value))}
+
                     style={{
                         justifyContent: 'center',
                         alignItems: 'center',
@@ -49,11 +53,9 @@ export function Header(){
                         marginLeft: -13
                     }}
 
-                           
                     defaultValue="VERSÃO AA"
                     defaultIndex={-1}
                 />
-            
         </Container>
     )
 }

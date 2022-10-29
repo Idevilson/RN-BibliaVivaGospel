@@ -12,9 +12,9 @@ function Home() {
             <header_1.Header />
 
             <styles_1.ButtonsContainer>
-                <homeButton_1.HomeButton backgroundColor="#7205DC" titleProps="ANTIGO TESTAMENTO" functionProps={function () { return navigation.navigate('AntigoTestamentoHome'); }} titleColor={"#3AF1A1"}/>
+                <homeButton_1.HomeButton backgroundColor="#7205DC" titleProps="ANTIGO TESTAMENTO" functionProps={function () { return navigation.navigate('AtTopTabs'); }} titleColor={"#3AF1A1"}/>
 
-                <homeButton_1.HomeButton backgroundColor="#3AF1A1" titleProps="ANTIGO TESTAMENTO" functionProps={function () { }} titleColor="#7205DC"/>
+                <homeButton_1.HomeButton backgroundColor="#3AF1A1" titleProps="NOVO TESTAMENTO" functionProps={function () { }} titleColor="#7205DC"/>
             </styles_1.ButtonsContainer>
         </styles_1.Container>);
 }

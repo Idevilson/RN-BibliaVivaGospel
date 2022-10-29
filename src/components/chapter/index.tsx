@@ -5,7 +5,7 @@ import  {
     Container,
     ChapterNumber
 } from "./styles";
-import {useBook} from "../../hooks/atBooksContext";
+import {useBook} from "../../hooks/BibleContext";
 
 interface dataProps {
     abbrev: string;

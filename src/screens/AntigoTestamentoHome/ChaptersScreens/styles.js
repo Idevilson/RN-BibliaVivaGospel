@@ -7,5 +7,5 @@ exports.__esModule = true;
 exports.Container = void 0;
 var native_1 = require("styled-components/native");
 var react_native_1 = require("react-native");
-exports.Container = (0, native_1["default"])(react_native_1.SafeAreaView)(templateObject_1 || (templateObject_1 = __makeTemplateObject(["\n    flex: 1;\n\n    padding: 20px;\n\n    background-color: #123;\n\n    align-items: center;\n    justify-content: center;\n"], ["\n    flex: 1;\n\n    padding: 20px;\n\n    background-color: #123;\n\n    align-items: center;\n    justify-content: center;\n"])));
+exports.Container = (0, native_1["default"])(react_native_1.SafeAreaView)(templateObject_1 || (templateObject_1 = __makeTemplateObject(["\n    flex: 1;\n    background-color: #123;\n    align-items: center;\n    justify-content: center;\n"], ["\n    flex: 1;\n    background-color: #123;\n    align-items: center;\n    justify-content: center;\n"])));
 var templateObject_1;

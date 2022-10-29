@@ -1,11 +1,12 @@
-import  React from "react"
-import {
-    ScrollView,
-    StyleSheet,
-    TouchableOpacity
-} from "react-native";
+import React from "react"
 
-import { useBook } from "../../../../hooks/atBooksContext";
+import {
+    StyleSheet,
+    TouchableOpacity,
+    FlatList,
+    View,
+    Modal
+} from "react-native";
 
 import  Animated, {
     useAnimatedStyle,
@@ -17,25 +18,55 @@ import {
     PanGestureHandler,
 } from "react-native-gesture-handler";
 
-import { AntDesign } from '@expo/vector-icons';
+import { SelectProvider } from '@mobile-reality/react-native-select-pro';
+import Slider from '@react-native-community/slider';
+import { Select } from '@mobile-reality/react-native-select-pro';
+
+import {
+    AntDesign,
+    Feather
+} from '@expo/vector-icons';
+
+import { useBook } from "../../../../hooks/BibleContext";
 
 import {
     Container,
     Verse,
-    VerseContainer,
-} from "./styles"
+    VerseNumber,
+    NumberFontSize,
+    HeaderModal,
+    Label,
+    BodyModal,
+    BottomModal,
+    Button,
+    LabelButton,
+    TextContainer,
+    SelectContainer
+} from "./styles";
 
-
+import { useBibleVersion } from "../../../../hooks/BibleVersionContext";
+import {BotomLabelBibleVersion} from "../../../../components/bottomLabelBibleVersion";
 
 const ButtonAnimated = Animated.createAnimatedComponent(TouchableOpacity);
 
 export function VerseScreen() {
-    const { book, chapterNumber } = useBook();
+    const {
+        setVersionSelected,
+        versionSelected
+    } = useBibleVersion();
 
-    console.log("Tela dos versículos");
+    const {
+        book,
+        chapterNumber,
+        setModalIsVisible,
+        modalIsVisible,
+        setFontSize,
+        fontSize,
+        storageFontSize
+    } = useBook();
 
-    const positionY = useSharedValue(0);
-    const positionX = useSharedValue(0);
+    const positionY = useSharedValue(330);
+    const positionX = useSharedValue(341);
 
     const onGestureEvent = useAnimatedGestureHandler({
         onStart(event, ctx: any){
@@ -52,7 +83,7 @@ export function VerseScreen() {
         }
     })
 
-    const settingsButtonbStyle = useAnimatedStyle(() => {
+    const settingsButtonStyle = useAnimatedStyle(() => {
         return {
             transform : [
                 { translateX: positionX.value },
@@ -61,32 +92,41 @@ export function VerseScreen() {
         }
     });
 
-    function handleOpemSettingsModal(){
-        console.log("funcionando");
+    function handleSettings(value: number){
+        setFontSize(value);
+        storageFontSize(value);
     }
+
+    console.log("Tela dos versos");
+
 
     return (
         <Container>
-            <ScrollView style={styles.Container}>
-                <VerseContainer
-                    selectable
-                >
-                    {
-                        book.chapters[chapterNumber].map((item, index) => (
-                            <Verse
-                                key={index}
-                            >
-                                {((index + 1) + " ") + item }
-                            </Verse>)
-                        )
-                    }
-                </VerseContainer>
-            </ScrollView>
+            <View style={styles.Container}>
+                   <FlatList
+                        data={book.chapters[chapterNumber]}
+                        renderItem={({ item, index }) => (
+                            <TextContainer>
+                                <VerseNumber>
+                                    {" " + (index + 1) + " "}
+                                </VerseNumber>
+                                <Verse
+                                    fontSize={fontSize}
+                                    key={index}
+                                >
+                                    {item}
+                                </Verse>
+                            </TextContainer>
+                        )}
+                   />
+
+                <BotomLabelBibleVersion bibleVersion={versionSelected.label} />
+            </View>
 
             <PanGestureHandler onGestureEvent={onGestureEvent}>
                 <Animated.View
                     style={[
-                        settingsButtonbStyle,
+                        settingsButtonStyle,
                         {
                             position: 'absolute',
                             backgroundColor: "#7205DC",
@@ -99,11 +139,79 @@ export function VerseScreen() {
                         }
                     ]}
                 >
-                    <ButtonAnimated onPress={() => handleOpemSettingsModal()}>
+                    <ButtonAnimated onPress={() => setModalIsVisible(true)}>
                         <AntDesign name="setting" size={34} color="#ffffff" />
                     </ButtonAnimated>
                 </Animated.View>
             </PanGestureHandler>
+
+            <View
+                style={styles.ModalContainer}
+            >
+                <Modal
+                    visible={modalIsVisible}
+                    transparent={true}
+                    animationType={"fade"}
+                >
+                    <SelectProvider>
+                        <View style={styles.ModalContainer}>
+                                    <View style={styles.ModalView}>
+                                        <Label>TAMANHO DA FONTE</Label>
+
+                                        <HeaderModal>
+                                            <Feather
+                                                name="minus"
+                                                size={24}
+                                                color="black"
+                                            />
+                                            <NumberFontSize fontSize={fontSize}>{fontSize}</NumberFontSize>
+                                            <Feather
+                                                name="plus"
+                                                size={24}
+                                                color="black"
+                                            />
+                                        </HeaderModal>
+
+                                        <BodyModal>
+                                            <Slider
+                                                style={{
+                                                    width: 250,
+                                                    height: 40,
+                                                }}
+                                                minimumValue={15}
+                                                maximumValue={35}
+                                                step={1}
+                                                onSlidingComplete={(value) => handleSettings(value)}
+                                                thumbTintColor="#7205DC"
+                                                minimumTrackTintColor="#7205DC"
+                                                maximumTrackTintColor="#000000"
+                                            />
+
+                                            <Label>VERSÃO DA BÍBLIA</Label>
+                                            <SelectContainer>
+                                                <Select
+                                                    defaultOption={versionSelected}
+                                                    animated={true}
+                                                    onSelect={(value) => setVersionSelected(value)}
+                                                    options={[
+                                                        { value: "0" , label: "VERSÃO AA"},
+                                                        { value: "1", label: "VERSÃO ACF"},
+                                                        { value: "2", label: "VERSÃO NVI"}
+                                                    ]}
+                                                />
+                                            </SelectContainer>
+                                        </BodyModal>
+
+                                        <BottomModal>
+                                            <Button onPress={() => setModalIsVisible(false)}>
+                                                <LabelButton>FECHAR</LabelButton>
+                                            </Button>
+                                        </BottomModal>
+                                    </View>
+                                </View>
+                        </SelectProvider>
+                </Modal>
+            </View>
         </Container>
     )
 }
@@ -111,6 +219,28 @@ export function VerseScreen() {
 
 const styles = StyleSheet.create({
     Container: {
-        padding: 5
+        paddingLeft: 5,
+        paddingRight: 5,
+        marginBottom: 20
+    },
+    ModalContainer: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    ModalView: {
+        margin: 20,
+        backgroundColor: "white",
+        borderRadius: 20,
+        padding: 25,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 8
     }
 })

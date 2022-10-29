@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react";
-
+import React, { useState, useEffect, memo } from "react";
 import { FlatList, StyleSheet } from "react-native";
-import { useIsFocused } from "@react-navigation/native";
 
-import { useBook } from "../../hooks/atBooksContext";
+import { useBook } from "../../hooks/BibleContext";
 import { BookButton } from "../../components/bookButton";
 import { SearchBar } from "../../components/searchBar";
 
 import { Container } from "./styles";
+import { BotomLabelBibleVersion } from "../../components/bottomLabelBibleVersion";
+import { useBibleVersion } from "../../hooks/BibleVersionContext";
 
 
 interface bookDataProps {
@@ -16,31 +16,35 @@ interface bookDataProps {
     name: string;
 }
 
-export function Books(){
+function BooksComponent(){
     const { bibleData } = useBook();
-    const isFocused = useIsFocused();
 
-    const [books, setBooks] = useState<bookDataProps[]>( [] );
-    const [searchText, setSearchText] = useState("");
-
+    const [books, setBooks] = useState<bookDataProps[]>( bibleData );
+    const {
+        versionSelected
+    } = useBibleVersion();
     function handleSearchBook(bookName: string) {
-        const book = bibleData.filter((item) => (item.name.includes(bookName)));
+        const book = bibleData.filter((item) =>
+            (
+                item.name
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, "")
+                .toLowerCase()
+                .includes(bookName))
+            );
 
         setBooks(book);
     }
-
-    useEffect(() => {
-        setBooks(bibleData);
-    }, [isFocused]);
 
     console.log("Tela dos livros do antigo testamento");
 
     return(
            <Container>
                 <SearchBar
-                    setSearchText={setSearchText}
-                    onPress={() => handleSearchBook(searchText)}
+                    setSearchText={(bookName) => handleSearchBook(String(bookName))}
+                    onPress={() => console.log("Funcionando!")}
                 />
+
                 <FlatList
                     data={books}
                     style={styles.FlatList}
@@ -60,9 +64,13 @@ export function Books(){
                         />
                     )}
                 />
+
+               <BotomLabelBibleVersion bibleVersion={versionSelected.label} />
            </Container>
     )
 }
+
+export const Books = memo(BooksComponent)
 
 const styles = StyleSheet.create({
     FlatList: {
